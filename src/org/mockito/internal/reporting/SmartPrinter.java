@@ -24,7 +24,7 @@ public class SmartPrinter {
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);
         
         this.wanted = printSettings.print(wanted);
-        this.actual = printSettings.print(actual);
+        this.actual = printSettings.printMismatchDescription(wanted, actual);
     }
 
     public String getWanted() {

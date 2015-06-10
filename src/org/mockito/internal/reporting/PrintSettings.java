@@ -44,11 +44,15 @@ public class PrintSettings {
     }
 
     public String print(List<Matcher> matchers, Invocation invocation) {
+    	return print(matchers, null, invocation);
+    }
+    
+    private String print(List<Matcher> matchers, Object[] mismatchedArgs, Invocation invocation) {
         MatchersPrinter matchersPrinter = new MatchersPrinter();
         String qualifiedName = new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
-        String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
+        String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, mismatchedArgs, this);
         if (isMultiline() || (!matchers.isEmpty() && invocationString.length() > MAX_LINE_LENGTH)) {
-            return qualifiedName + matchersPrinter.getArgumentsBlock(matchers, this);
+            return qualifiedName + matchersPrinter.getArgumentsBlock(matchers, mismatchedArgs, this);
         } else {
             return invocationString;
         }
@@ -60,5 +64,9 @@ public class PrintSettings {
 
     public String print(InvocationMatcher invocationMatcher) {
         return print(invocationMatcher.getMatchers(), invocationMatcher.getInvocation());
+    }
+    
+    public String printMismatchDescription(InvocationMatcher invocationMatcher, Invocation invocation) {
+        return print(invocationMatcher.getMatchers(), invocation.getArguments(), invocation);
     }
 }

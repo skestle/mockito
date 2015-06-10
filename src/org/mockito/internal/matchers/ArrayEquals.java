@@ -51,6 +51,14 @@ public class ArrayEquals extends Equals {
             super.describeTo(description);
         }
     }
+    
+    public void describeMismatch(Object item, Description description) {
+    	if (item != null && item.getClass().isArray()) {
+            appendArray(createObjectArray(getWanted()), description);
+        } else {
+            super.describeTo(description);
+        }
+    }
 
     private void appendArray(Object[] array, Description description) {
         description.appendText("[");

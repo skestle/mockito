@@ -29,17 +29,21 @@ public class Equals extends ArgumentMatcher<Object> implements ContainsExtraType
     }
 
     public String describe(Object object) {
-        return quoting() + object + quoting();
+        return quoting(object) + object + quoting(object);
     }
 
-    private String quoting() {
-        if (wanted instanceof String) {
+    private String quoting(Object o) {
+        if (o instanceof String && wanted instanceof String) {
             return "\"";
-        } else if (wanted instanceof Character) {
+        } else if (o instanceof Character && wanted instanceof Character) {
             return "'";
         } else {
             return "";
         }
+    }
+    
+    public void describeMismatch(Object item, Description description) {
+    	description.appendText(describe(item));
     }
 
     protected final Object getWanted() {
